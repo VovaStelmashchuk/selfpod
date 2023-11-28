@@ -12,3 +12,6 @@ docker build -t webhook .
 ```bash
 docker run --name webhook -p 6000:5000 -v "$(pwd)/for_docker_mount/:/application/tmp_files/" --rm webhook
 ```
+
+Environment variables:
+`HOOK_TOKEN=hook_123_token`
