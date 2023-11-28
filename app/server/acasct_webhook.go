@@ -6,6 +6,7 @@ import (
 	"io"
 	"main/app/media"
 	"net/http"
+	"os"
 )
 
 type Episode struct {
@@ -19,9 +20,13 @@ type Episode struct {
 }
 
 func AcastWebHook(w http.ResponseWriter, r *http.Request) {
-	query := r.URL.Query()["token"][0]
+	hookToken := os.Getenv("HOOK_TOKEN")
+	queryToken := r.URL.Query()["token"][0]
 
-	fmt.Printf("Token: %s\n", query)
+	if hookToken != queryToken {
+		http.Error(w, "Invalid token", http.StatusBadRequest)
+		return
+	}
 
 	var episode Episode
 

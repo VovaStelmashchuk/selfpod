@@ -1,5 +1,5 @@
 ###
-POST http://localhost:5000/acast?token=testToken_1234567890
+POST http://localhost:5000/acast?token=hook_123_token
 Content-Type: application/json
 
 {
