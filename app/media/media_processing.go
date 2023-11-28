@@ -8,20 +8,20 @@ import (
 	"path/filepath"
 )
 
-const DownloadFolder = "tmp_files"
+const TemporaryFolder = "tmp_files"
 const AudioFile = "audio.wav"
 const ImageFile = "image.jpg"
 
-func PrepareNewVideo(audioUrl string, imageUrl string) {
-	os.Mkdir(DownloadFolder, 0755)
+func PrepareNewVideo(audioUrl string, imageUrl string) string {
+	os.Mkdir(TemporaryFolder, 0755)
 
 	metaFiles := downloadFiles(audioUrl, imageUrl)
 
-	createVideoFile(metaFiles)
+	return createVideoFile(metaFiles)
 }
 
-func createVideoFile(metaFiles MetaFiles) {
-	outputFile := path.Join(DownloadFolder, "output.mov")
+func createVideoFile(metaFiles MetaFiles) string {
+	outputFile := path.Join(TemporaryFolder, "output.mov")
 
 	println(metaFiles.image)
 
@@ -32,6 +32,8 @@ func createVideoFile(metaFiles MetaFiles) {
 	}
 
 	log.Printf("Video file %s created successfully", outputFile)
+
+	return outputFile
 }
 
 type MetaFiles struct {
@@ -40,8 +42,8 @@ type MetaFiles struct {
 }
 
 func downloadFiles(audioUrl string, imageUrl string) MetaFiles {
-	audioFile := filepath.Join(DownloadFolder, AudioFile)
-	imageFile := filepath.Join(DownloadFolder, ImageFile)
+	audioFile := filepath.Join(TemporaryFolder, AudioFile)
+	imageFile := filepath.Join(TemporaryFolder, ImageFile)
 
 	downloadAndSaveFile(audioUrl, audioFile)
 	downloadAndSaveFile(imageUrl, imageFile)

@@ -3,7 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
-	"main/app/server"
+	"main/app"
 	"net/http"
 	"os"
 )
@@ -11,7 +11,7 @@ import (
 const serverPort = "5000"
 
 func main() {
-	http.HandleFunc("/acast", server.AcastWebHook)
+	http.HandleFunc("/acast", app.AcastWebHook)
 	err := http.ListenAndServe(":"+serverPort, nil)
 
 	if errors.Is(err, http.ErrServerClosed) {

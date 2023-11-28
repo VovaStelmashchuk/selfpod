@@ -123,3 +123,4 @@ fabric.properties
 
 ## Project specific
 tmp_files
+for_docker_mount
