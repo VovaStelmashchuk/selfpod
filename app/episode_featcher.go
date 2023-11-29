@@ -85,5 +85,9 @@ func extractPTagsBeforeBR(htmlContent string) ([]string, error) {
 	}
 	f(doc)
 
+	for i := range pContents {
+		pContents[i] = strings.ReplaceAll(pContents[i], " ", " ")
+	}
+
 	return pContents, nil
 }
