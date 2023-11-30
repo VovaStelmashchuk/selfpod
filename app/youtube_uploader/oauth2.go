@@ -9,6 +9,7 @@ import (
 	"google.golang.org/api/youtube/v3"
 	"io"
 	"log"
+	appconfig "main/app/config"
 	"net/http"
 	"net/url"
 	"os"
@@ -59,7 +60,11 @@ func getConfig(scope string) *oauth2.Config {
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
 
-	config.RedirectURL = "http://localhost:5000/oauth2callback"
+	googleRedirectUrl, _ := url.JoinPath(appconfig.GoogleRedirectHost, appconfig.GoogleRedirectPath)
+
+	fmt.Printf("googleRedirectUrl: %v\n", googleRedirectUrl)
+
+	config.RedirectURL = googleRedirectUrl
 
 	return config
 }

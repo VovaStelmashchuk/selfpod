@@ -1,5 +1,7 @@
 package app
 
+import "main/app/media"
+
 type YoutubeItem struct {
 	Title         string
 	Description   string
@@ -7,8 +9,7 @@ type YoutubeItem struct {
 }
 
 func CreateYoutubeItem(episode Episode) YoutubeItem {
-	//videoFile := media.PrepareNewVideo(episode.AudioUrl, episode.CoverUrl)
-	videoFile := "tmp_files/output.mov"
+	videoFile := media.PrepareNewVideo(episode.AudioUrl, episode.CoverUrl)
 
 	episodeMetaInfo := GetEpisodeMetaInfo(episode.ID)
 

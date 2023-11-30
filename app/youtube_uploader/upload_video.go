@@ -24,13 +24,13 @@ type YoutubeUploadRequset struct {
 	Description string
 }
 
-func UploadToYoutube(uploadRequest YoutubeUploadRequset) error {
+func UploadToYoutube(uploadRequest YoutubeUploadRequset) {
 	flag.Parse()
 
-	client, error := GetClient(youtube.YoutubeUploadScope)
+	client, err := GetClient(youtube.YoutubeUploadScope)
 
-	if error != nil {
-		return error
+	if err != nil {
+		log.Fatalf("Error creating YouTube client: %v", err)
 	}
 
 	ctx := context.Background()
@@ -67,5 +67,4 @@ func UploadToYoutube(uploadRequest YoutubeUploadRequset) error {
 		fmt.Printf("Error making YouTube API call: %v", err)
 	}
 	fmt.Printf("Upload successful! Video ID: %v\n", response.Id)
-	return nil
 }

@@ -3,9 +3,9 @@ package app
 import (
 	"encoding/json"
 	"io"
+	"main/app/config"
 	"main/app/youtube_uploader"
 	"net/http"
-	"os"
 )
 
 type Episode struct {
@@ -19,21 +19,14 @@ type Episode struct {
 }
 
 func AcastWebHook(w http.ResponseWriter, r *http.Request) {
-	hookToken := os.Getenv("HOOK_TOKEN")
 	queryToken := r.URL.Query()["token"][0]
 
-	if hookToken != queryToken {
+	if config.ACastHookToken != queryToken {
 		http.Error(w, "Invalid token", http.StatusBadRequest)
 		return
 	}
 
-	var episode Episode
-
-	err := json.NewDecoder(r.Body).Decode(&episode)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
+	episode, err := getEpisodeFromHook(w, r)
 
 	res := CreateYoutubeItem(episode)
 
@@ -44,6 +37,19 @@ func AcastWebHook(w http.ResponseWriter, r *http.Request) {
 			Description: res.Description,
 		},
 	)
+	if err != nil {
+		http.Error(w, "Something went wrong", http.StatusInternalServerError)
+	}
 
 	io.WriteString(w, "Video uploaded to youtube")
+}
+
+func getEpisodeFromHook(w http.ResponseWriter, r *http.Request) (Episode, error) {
+	var episode Episode
+
+	err := json.NewDecoder(r.Body).Decode(&episode)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+	return episode, err
 }
