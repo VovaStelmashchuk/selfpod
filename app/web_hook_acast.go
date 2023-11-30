@@ -2,8 +2,8 @@ package app
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
+	"main/app/youtube_uploader"
 	"net/http"
 	"os"
 )
@@ -37,7 +37,13 @@ func AcastWebHook(w http.ResponseWriter, r *http.Request) {
 
 	res := CreateYoutubeItem(episode)
 
-	fmt.Printf("%+v\n", res)
+	youtube_uploader.UploadToYoutube(
+		youtube_uploader.YoutubeUploadRequset{
+			Filename:    res.VideoFilePath,
+			Title:       res.Title,
+			Description: res.Description,
+		},
+	)
 
-	io.WriteString(w, "Received episode: "+episode.ID+"\n")
+	io.WriteString(w, "Video uploaded to youtube")
 }
