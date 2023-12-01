@@ -14,4 +14,10 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:5000/login
+POST http://localhost:6000/login
+
+###
+GET http://localhost:6000/auth/google/callback/
+
+###
+GET http://localhost:6000/auth/google/callback?state=state-token&code=4%2F0AfJohXkZ8_oXB-7PjNz2hllwy77b3x2w7SMegSPTmvBZZ021xXRLAPhQmtv4zRoLeV0sJw&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.upload

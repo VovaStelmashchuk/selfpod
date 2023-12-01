@@ -16,7 +16,7 @@ docker run --name webhook -p 6000:5000 -v "$(pwd)/for_docker_mount/:/application
 Environment variables:
 `A_CAST_HOOK_TOKEN=hook_123_token`
 `APP_PORT=5000`
-`GOOGLE_REDIRECT_URL_HOST=http://localhost:6000/`
+`GOOGLE_REDIRECT_URL=http://localhost:6000/`
 
 The google redirect url will be `http://localhost:6000/auth/google/callback`
 
