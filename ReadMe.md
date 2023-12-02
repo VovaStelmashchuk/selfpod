@@ -30,3 +30,11 @@ Also its means the app support only one rss feed, one youtube account, etc per o
 - Move a cast show to environment variable
 - Add logout method
 - Some UI improvements
+
+
+## Build docker image
+
+```sh
+docker buildx create --use
+docker buildx build --platform linux/arm64/v8 -t vovochkastelmashchuk/selfpod:0.0.1 --push .
+```
