@@ -47,6 +47,8 @@ func processTask(task ProcessEpisodeTask) {
 		},
 	)
 
+	err = database.UpdateEpisodeState(task.EpisodeId, database.SUCCESS)
+
 	if err != nil {
 		database.UpdateEpisodeState(task.EpisodeId, database.FAIL)
 	}

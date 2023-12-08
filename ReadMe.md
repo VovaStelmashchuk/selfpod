@@ -37,6 +37,3 @@ Also its means the app support only one rss feed, one youtube account, etc per o
 docker buildx create --use
 docker buildx build --platform linux/arm64/v8 -t vovochkastelmashchuk/selfpod:0.0.1 --push .
 ```
-
-Redis:
-port: 6379
