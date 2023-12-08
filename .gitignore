@@ -112,3 +112,5 @@ fabric.properties
 tmp_files
 for_docker_mount
 client_secret.json
+http-client.private.env.json
+selfpod.db

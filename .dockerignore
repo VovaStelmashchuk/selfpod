@@ -121,4 +121,7 @@ test.http
 .git
 .gitignore
 Dockerfile
+docker-compose.yml
 .dockerignore
+http-client.private.env.json
+selfpod.db

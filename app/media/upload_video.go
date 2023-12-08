@@ -1,4 +1,4 @@
-package youtube_uploader
+package media
 
 import (
 	"flag"
@@ -6,6 +6,7 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/api/option"
 	"log"
+	"main/app/google"
 	"os"
 	"strings"
 
@@ -27,7 +28,7 @@ type YoutubeUploadRequset struct {
 func UploadToYoutube(uploadRequest YoutubeUploadRequset) {
 	flag.Parse()
 
-	client, err := GetClient(youtube.YoutubeUploadScope)
+	client, err := google.GetClient(youtube.YoutubeUploadScope)
 
 	if err != nil {
 		log.Fatalf("Error creating YouTube client: %v", err)

@@ -1,4 +1,4 @@
-package youtube_uploader
+package google
 
 import (
 	"encoding/json"
@@ -15,13 +15,28 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"strings"
 )
 
-func CreateClientEndPoint(w http.ResponseWriter, r *http.Request) {
+func LoginToGoogle(w http.ResponseWriter, r *http.Request) {
+	queryToken := r.URL.Query()["token"][0]
+
+	if appconfig.ACastHookToken != queryToken {
+		http.Error(w, "Invalid token", http.StatusUnauthorized)
+		return
+	}
+
 	config := getConfig(youtube.YoutubeUploadScope)
 	authUrl := config.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
 
-	io.WriteString(w, "The auth link is: "+authUrl+"\n")
+	io.WriteString(w, "The auth link is: "+removeTrailingSlash(authUrl)+"\n")
+}
+
+func removeTrailingSlash(s string) string {
+	if strings.HasSuffix(s, "/") {
+		return s[:len(s)-1]
+	}
+	return s
 }
 
 func Oauth2Callback(w http.ResponseWriter, r *http.Request) {
@@ -37,7 +52,6 @@ func Oauth2Callback(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain")
 	fmt.Fprintf(w, "Received code: %v\r\nYou can now safely close this browser window.", code)
 }
-
 func GetClient(scope string) (*http.Client, error) {
 	token, err := tokenFromFile()
 	if err != nil {

@@ -3,17 +3,21 @@ package main
 import (
 	"errors"
 	"fmt"
-	"main/app"
+	"main/app/acast"
 	"main/app/config"
-	"main/app/youtube_uploader"
+	"main/app/google"
 	"net/http"
 	"os"
 )
 
 func main() {
-	http.HandleFunc("/acast", app.AcastWebHook)
-	http.HandleFunc("/login", youtube_uploader.CreateClientEndPoint)
-	http.HandleFunc(config.GoogleRedirectPath, youtube_uploader.Oauth2Callback)
+	startServer()
+}
+
+func startServer() {
+	http.HandleFunc("/acast", acast.WebHook)
+	http.HandleFunc("/login", google.LoginToGoogle)
+	http.HandleFunc(config.GoogleRedirectPath, google.Oauth2Callback)
 
 	err := http.ListenAndServe(":"+config.Port, nil)
 

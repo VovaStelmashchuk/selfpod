@@ -1,19 +1,20 @@
-package app
+package acast
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"github.com/mmcdole/gofeed"
 	"golang.org/x/net/html"
 	"strings"
 )
 
-type YoutubeEpisode struct {
+type EpisodeMetaInfo struct {
 	Title       string
 	Description string
 }
 
-func GetEpisodeMetaInfo(episodeId string) YoutubeEpisode {
+func GetEpisodeMetaInfo(episodeId string) (EpisodeMetaInfo, error) {
 	fp := gofeed.NewParser()
 	feed, _ := fp.ParseURL("https://feeds.acast.com/public/shows/62efce09bcb3d10013e2cc9b")
 
@@ -31,18 +32,18 @@ func GetEpisodeMetaInfo(episodeId string) YoutubeEpisode {
 	}
 
 	if found {
-		return buildYoutubeEpisode(targetEpisode)
+		return buildEpisodeMetaInfo(targetEpisode), nil
 	} else {
-		panic(fmt.Sprintf("Episode with ID %s not found", episodeId))
+		return EpisodeMetaInfo{}, errors.New("episode not found")
 	}
 }
 
-func buildYoutubeEpisode(targetEpisode *gofeed.Item) YoutubeEpisode {
+func buildEpisodeMetaInfo(targetEpisode *gofeed.Item) EpisodeMetaInfo {
 	lines, err := extractPTagsBeforeBR(targetEpisode.Description)
 	if err != nil {
 		panic(fmt.Sprintf("Error while parsing episode description: %s", err))
 	}
-	return YoutubeEpisode{
+	return EpisodeMetaInfo{
 		Title:       targetEpisode.Title,
 		Description: strings.Join(lines, "\n"),
 	}
