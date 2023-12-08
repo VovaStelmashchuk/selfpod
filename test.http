@@ -1,5 +1,5 @@
 ###
-POST http://localhost:5000/acast?token=123
+POST https://hook.androidstory.dev/acast?token=token
 Content-Type: application/json
 
 {
@@ -8,8 +8,8 @@ Content-Type: application/json
   "title": "My new episode 11",
   "status": "published",
   "publishDate": "2020-01-13T21:57:57.768Z",
-  "coverUrl": "https://kanapaimage.ams3.digitaloceanspaces.com/cocktails/1/origin/1.jpg",
-  "audioUrl": "https://kanapaimage.ams3.digitaloceanspaces.com/tmp/1m.wav"
+  "coverUrl": "https://kanapaimage.ams3.digitaloceanspaces.com/cocktails/20/origin/20.jpg",
+  "audioUrl": "https://kanapaimage.ams3.digitaloceanspaces.com/tmp/5m.wav"
 }
 
 
@@ -18,6 +18,3 @@ POST http://localhost:6000/login
 
 ###
 GET http://localhost:6000/auth/google/callback/
-
-###
-GET http://localhost:6000/auth/google/callback?state=state-token&code=4%2F0AfJohXkZ8_oXB-7PjNz2hllwy77b3x2w7SMegSPTmvBZZ021xXRLAPhQmtv4zRoLeV0sJw&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.upload

@@ -1,15 +1,8 @@
-FROM golang:1.20-alpine
+FROM arm64v8/golang:1.20-alpine
 
-RUN apk update & apk upgrade
-RUN apk --no-cache add ca-certificates wget bash xz-libs git
-WORKDIR /tmp
-RUN wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz
-RUN tar -xvJf  ffmpeg-release-amd64-static.tar.xz
-RUN cd ff* && mv ff* /usr/local/bin
-
-WORKDIR /
-
-ENV GO111MODULE=on
+RUN apk update
+RUN apk upgrade
+RUN apk add --no-cache ffmpeg
 
 WORKDIR /application
 

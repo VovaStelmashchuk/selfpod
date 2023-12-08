@@ -13,7 +13,14 @@ const AudioFile = "audio.wav"
 const ImageFile = "image.jpg"
 
 func PrepareNewVideo(audioUrl string, imageUrl string) string {
-	os.Mkdir(TemporaryFolder, 0755)
+	err := os.RemoveAll(TemporaryFolder)
+	if err != nil {
+		log.Printf("Error removing temporary folder: %v", TemporaryFolder)
+	}
+	err = os.Mkdir(TemporaryFolder, 0755)
+	if err != nil {
+		log.Printf("Error creating temporary folder: %v", TemporaryFolder)
+	}
 
 	metaFiles := downloadFiles(audioUrl, imageUrl)
 
@@ -25,7 +32,11 @@ func createVideoFile(metaFiles MetaFiles) string {
 
 	println(metaFiles.image)
 
-	cmd := exec.Command("ffmpeg", "-loop", "1", "-i", metaFiles.image, "-i", metaFiles.audio, "-vf", "scale=1920:1080", "-tune", "stillimage", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-shortest", "-loglevel", "verbose", outputFile)
+	cmd := exec.Command(
+		"ffmpeg", "-loop", "1", "-i", metaFiles.image, "-i", metaFiles.audio, "-vf", "scale=1920:1080", "-tune",
+		"stillimage", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-shortest", "-loglevel",
+		"verbose", outputFile,
+	)
 
 	if err := cmd.Run(); err != nil {
 		log.Fatalf("FFmpeg error: %v", err)

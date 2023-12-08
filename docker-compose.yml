@@ -12,3 +12,4 @@ services:
       - GOOGLE_REDIRECT_URL=http://localhost:6000/
     volumes:
       - ./for_docker_mount/:/application/tmp_files/
+      - ./client_secret.json:/client_secret.json
