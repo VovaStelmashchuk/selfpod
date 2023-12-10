@@ -15,7 +15,7 @@ jobs:
   build:
     runs-on: ubuntu:22.04
     container:
-      image: aschmelyun/cleaver:latestg
+      image: catthehacker/ubuntu:act-latest
     steps:
       - uses: https://gitea.com/actions/checkout@v2
 
