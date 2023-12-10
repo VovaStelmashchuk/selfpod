@@ -14,8 +14,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu:22.04
+    container:
+      image: catthehacker/ubuntu:act-latest
     steps:
-      - uses: http://gitea.com/actions/checkout@v2
+      - uses: https://gitea.com/actions/checkout@v2
+
       - name: Set up QEMU
         uses: https://github.com/docker/setup-qemu-action@v1
 
