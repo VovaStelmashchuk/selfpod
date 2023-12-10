@@ -43,7 +43,7 @@ func processTask(task ProcessEpisodeTask) {
 		YoutubeUploadRequset{
 			Filename:    videoFile,
 			Title:       episode.Title,
-			Description: episode.Description,
+			Description: episode.Description + "\n Ви можете підтримати нас на https://www.patreon.com/androidstory",
 		},
 	)
 
