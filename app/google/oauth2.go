@@ -26,7 +26,11 @@ func LoginToGoogle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	config := getConfig(youtube.YoutubeUploadScope)
+	config, err := getConfig(youtube.YoutubeUploadScope)
+	if err != nil {
+		http.Error(w, "Error getting config: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
 	authUrl := config.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
 
 	io.WriteString(w, "The auth link is: "+removeTrailingSlash(authUrl)+"\n")
@@ -40,53 +44,92 @@ func removeTrailingSlash(s string) string {
 }
 
 func Oauth2Callback(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("Oauth2Callback\n")
 	code := r.FormValue("code")
-	token, err := exchangeToken(getConfig(youtube.YoutubeUploadScope), code)
-
-	if err != nil {
-		log.Fatalf("Unable to retrieve token %v", err)
+	if code == "" {
+		http.Error(w, "Code not found in the request", http.StatusBadRequest)
+		return
 	}
-	saveToken(token)
 
-	w.Header().Set("Content-Type", "text/plain")
-	fmt.Fprintf(w, "Received code: %v\r\nYou can now safely close this browser window.", code)
-}
-func GetClient(scope string) (*http.Client, error) {
-	token, err := tokenFromFile()
+	config, err := getConfig(youtube.YoutubeUploadScope)
 	if err != nil {
+		log.Printf("Error getting config: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	token, err := exchangeToken(config, code)
+	if err != nil {
+		log.Printf("Error exchanging token: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	err = saveToken(token)
+	if err != nil {
+		log.Printf("Error saving token: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	fmt.Fprintf(w, "<html><body><p>Authorization successful. You can now close this window.</p></body></html>")
+}
+
+func GetClient(scope string) (*http.Client, error) {
+	config, err := getConfig(scope)
+	if err != nil {
+		log.Printf("Error getting config: %v", err)
 		return nil, err
 	}
 
-	return getConfig(scope).Client(context.Background(), token), nil
-}
-
-func getConfig(scope string) *oauth2.Config {
-	clientSecretFile, err := os.ReadFile("client_secret.json")
+	tok, err := tokenFromFile()
 	if err != nil {
-		log.Fatalf("Unable to read client secret file: %v", err)
+		log.Printf("Error getting token from file: %v", err)
+		return nil, err
 	}
 
-	// If modifying the scope, delete your previously saved credentials
-	// at ~/.credentials/youtube-go.json
+	tokenSource := config.TokenSource(context.Background(), tok)
+	newToken, err := tokenSource.Token()
+	if err != nil {
+		log.Printf("Error getting new token: %v", err)
+		return nil, err
+	}
+
+	if newToken.AccessToken != tok.AccessToken {
+		// Token was refreshed, save the new token
+		err = saveToken(newToken)
+		if err != nil {
+			log.Printf("Error saving refreshed token: %v", err)
+		}
+	}
+
+	return config.Client(context.Background(), newToken), nil
+}
+
+func getConfig(scope string) (*oauth2.Config, error) {
+	clientSecretFile, err := os.ReadFile("client_secret.json")
+	if err != nil {
+		log.Printf("Unable to read client secret file: %v", err)
+		return nil, err
+	}
+
 	config, err := google.ConfigFromJSON(clientSecretFile, scope)
 	if err != nil {
-		log.Fatalf("Unable to parse client secret file to config: %v", err)
+		log.Printf("Unable to parse client secret file to config: %v", err)
+		return nil, err
 	}
 
 	googleRedirectUrl, _ := url.JoinPath(appconfig.GoogleRedirectHost, appconfig.GoogleRedirectPath)
-
-	fmt.Printf("googleRedirectUrl: %v\n", googleRedirectUrl)
-
 	config.RedirectURL = googleRedirectUrl
 
-	return config
+	return config, nil
 }
 
 func exchangeToken(config *oauth2.Config, code string) (*oauth2.Token, error) {
 	tok, err := config.Exchange(context.Background(), code)
 	if err != nil {
-		log.Fatalf("Unable to retrieve token %v", err)
+		log.Printf("Unable to retrieve token: %v", err)
+		return nil, err
 	}
 	return tok, nil
 }
@@ -106,23 +149,42 @@ func tokenCacheFile() (string, error) {
 
 func tokenFromFile() (*oauth2.Token, error) {
 	file, err := tokenCacheFile()
-	open, err := os.Open(file)
-
 	if err != nil {
 		return nil, err
 	}
-	t := &oauth2.Token{}
-	err = json.NewDecoder(open).Decode(t)
-	defer open.Close()
-	return t, err
-}
 
-func saveToken(token *oauth2.Token) {
-	file, err := tokenCacheFile()
-	f, err := os.OpenFile(file, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
+	f, err := os.Open(file)
 	if err != nil {
-		log.Fatalf("Unable to cache oauth token: %v", err)
+		return nil, err
 	}
 	defer f.Close()
-	json.NewEncoder(f).Encode(token)
+
+	t := &oauth2.Token{}
+	err = json.NewDecoder(f).Decode(t)
+	if err != nil {
+		return nil, err
+	}
+
+	return t, nil
+}
+
+func saveToken(token *oauth2.Token) error {
+	file, err := tokenCacheFile()
+	if err != nil {
+		log.Printf("Unable to get token cache file path: %v", err)
+		return err
+	}
+
+	f, err := os.OpenFile(file, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
+	if err != nil {
+		log.Printf("Unable to cache oauth token: %v", err)
+		return err
+	}
+	defer f.Close()
+
+	err = json.NewEncoder(f).Encode(token)
+	if err != nil {
+		log.Printf("Unable to encode oauth token: %v", err)
+	}
+	return err
 }

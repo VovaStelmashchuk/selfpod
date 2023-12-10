@@ -13,3 +13,5 @@ services:
     volumes:
       - ./for_docker_mount/:/application/tmp_files/
       - ./client_secret.json:/client_secret.json
+      - ./selfpod.db:/selfpod.db
+      - ./selfpod-logs.log:/selfpod-logs.log

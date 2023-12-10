@@ -2,7 +2,7 @@ package acast
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"main/app/config"
 	"main/app/database"
 	"main/app/media"
@@ -30,19 +30,17 @@ func WebHook(w http.ResponseWriter, r *http.Request) {
 	var episode Episode
 	err := json.NewDecoder(r.Body).Decode(&episode)
 	if err != nil {
-		http.Error(w, "Something went wrong", http.StatusInternalServerError)
+		log.Printf("fail to decode body: %v", err)
+		http.Error(w, "Fail to decode body", http.StatusInternalServerError)
 	}
-
-	fmt.Printf("episode: %v\n", episode)
 
 	episodeMetaInfo, err := GetEpisodeMetaInfo(episode.ID)
 
 	if err != nil {
+		log.Printf("fail to get episode meta info: %v", err)
 		http.Error(w, "Something went wrong", http.StatusInternalServerError)
 		return
 	}
-
-	fmt.Printf("episodeMetaInfo: %v\n", episodeMetaInfo)
 
 	id, err := database.SaveEpisode(
 		database.Episode{
@@ -54,8 +52,6 @@ func WebHook(w http.ResponseWriter, r *http.Request) {
 			ProcessingState: database.NOT_STARTED,
 		},
 	)
-
-	fmt.Printf("id: %v\n", id)
 
 	media.ProcessEpisode(
 		media.ProcessEpisodeTask{
@@ -70,7 +66,7 @@ func WebHook(w http.ResponseWriter, r *http.Request) {
 	err = json.NewEncoder(w).Encode(response)
 
 	if err != nil {
-		fmt.Printf("error: %v", err)
+		log.Printf("error when try to procces a cast web hoook: %v", err)
 		http.Error(w, "Something went wrong", http.StatusInternalServerError)
 	}
 }

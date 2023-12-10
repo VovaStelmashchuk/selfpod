@@ -32,6 +32,8 @@ func createVideoFile(metaFiles MetaFiles) string {
 
 	println(metaFiles.image)
 
+	log.Printf("Creating video %s by ffmpeg", outputFile)
+
 	cmd := exec.Command(
 		"ffmpeg", "-loop", "1", "-i", metaFiles.image, "-i", metaFiles.audio, "-vf", "scale=1920:1080", "-tune",
 		"stillimage", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-shortest", "-loglevel",

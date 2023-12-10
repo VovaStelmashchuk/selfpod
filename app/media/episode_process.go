@@ -1,7 +1,7 @@
 package media
 
 import (
-	"fmt"
+	"log"
 	"main/app/database"
 )
 
@@ -28,10 +28,10 @@ func worker(taskQueue <-chan ProcessEpisodeTask) {
 }
 
 func processTask(task ProcessEpisodeTask) {
-	fmt.Printf("Processing episode %v\n", task.EpisodeId)
+	log.Printf("Processing episode %v", task.EpisodeId)
 	err := database.UpdateEpisodeState(task.EpisodeId, database.IN_PROGRESS)
 	if err != nil {
-		fmt.Print("Error updating episode state to IN_PROGRESS")
+		log.Printf("Error updating episode state to IN_PROGRESS: %v", err)
 		return
 	}
 
@@ -50,6 +50,7 @@ func processTask(task ProcessEpisodeTask) {
 	err = database.UpdateEpisodeState(task.EpisodeId, database.SUCCESS)
 
 	if err != nil {
+		log.Printf("Error updating episode state to SUCCESS: %v", err)
 		database.UpdateEpisodeState(task.EpisodeId, database.FAIL)
 	}
 }

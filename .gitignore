@@ -114,3 +114,4 @@ for_docker_mount
 client_secret.json
 http-client.private.env.json
 selfpod.db
+selfpod-logs.log

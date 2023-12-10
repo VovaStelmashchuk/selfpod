@@ -8,7 +8,7 @@ Content-Type: application/json
   "title": "My new episode 11",
   "status": "published",
   "publishDate": "2020-01-13T21:57:57.768Z",
-  "coverUrl": "https://kanapaimage.ams3.digitaloceanspaces.com/cocktails/20/origin/20.jpg",
+  "coverUrl": "https://kanapaimage.ams3.digitaloceanspaces.com/cocktails/135/origin/135.jpg",
   "audioUrl": "https://kanapaimage.ams3.digitaloceanspaces.com/tmp/5m.wav"
 }
 

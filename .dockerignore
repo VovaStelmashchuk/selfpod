@@ -125,3 +125,4 @@ docker-compose.yml
 .dockerignore
 http-client.private.env.json
 selfpod.db
+selfpod-logs.log

@@ -3,7 +3,6 @@ package acast
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"github.com/mmcdole/gofeed"
 	"golang.org/x/net/html"
 	"strings"
@@ -32,21 +31,18 @@ func GetEpisodeMetaInfo(episodeId string) (EpisodeMetaInfo, error) {
 	}
 
 	if found {
-		return buildEpisodeMetaInfo(targetEpisode), nil
+		return buildEpisodeMetaInfo(targetEpisode)
 	} else {
 		return EpisodeMetaInfo{}, errors.New("episode not found")
 	}
 }
 
-func buildEpisodeMetaInfo(targetEpisode *gofeed.Item) EpisodeMetaInfo {
+func buildEpisodeMetaInfo(targetEpisode *gofeed.Item) (EpisodeMetaInfo, error) {
 	lines, err := extractPTagsBeforeBR(targetEpisode.Description)
-	if err != nil {
-		panic(fmt.Sprintf("Error while parsing episode description: %s", err))
-	}
 	return EpisodeMetaInfo{
 		Title:       targetEpisode.Title,
 		Description: strings.Join(lines, "\n"),
-	}
+	}, err
 }
 func extractPTagsBeforeBR(htmlContent string) ([]string, error) {
 	doc, err := html.Parse(strings.NewReader(htmlContent))

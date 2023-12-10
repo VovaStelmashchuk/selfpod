@@ -2,11 +2,13 @@ package media
 
 import (
 	"io"
+	"log"
 	"net/http"
 	"os"
 )
 
 func downloadAndSaveFile(url string, fileName string) {
+	log.Printf("Downloading file %s", url)
 	resp, err := http.Get(url)
 	if err != nil {
 		panic(err)
@@ -23,4 +25,5 @@ func downloadAndSaveFile(url string, fileName string) {
 	if err != nil {
 		panic(err)
 	}
+	log.Printf("File %s downloaded successfully into %s", url, fileName)
 }

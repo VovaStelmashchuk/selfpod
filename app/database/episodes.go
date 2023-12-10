@@ -17,7 +17,6 @@ func init() {
 		log.Fatal(err)
 	}
 
-	// Create episodes table if it doesn't exist
 	createTableSQL := `CREATE TABLE IF NOT EXISTS episodes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         acast_id TEXT,

@@ -2,7 +2,6 @@ package media
 
 import (
 	"flag"
-	"fmt"
 	"golang.org/x/net/context"
 	"google.golang.org/api/option"
 	"log"
@@ -28,17 +27,17 @@ type YoutubeUploadRequset struct {
 func UploadToYoutube(uploadRequest YoutubeUploadRequset) {
 	flag.Parse()
 
-	client, err := google.GetClient(youtube.YoutubeUploadScope)
+	client, getClientError := google.GetClient(youtube.YoutubeUploadScope)
 
-	if err != nil {
-		log.Fatalf("Error creating YouTube client: %v", err)
+	if getClientError != nil {
+		log.Fatalf("Error creating YouTube client: %v", getClientError)
 	}
 
 	ctx := context.Background()
 	service, err := youtube.NewService(ctx, option.WithHTTPClient(client))
 
 	if err != nil {
-		log.Fatalf("Error creating YouTube client: %v", err)
+		log.Fatalf("Error creating YouTube new service: %v", err)
 	}
 
 	upload := &youtube.Video{
@@ -65,7 +64,7 @@ func UploadToYoutube(uploadRequest YoutubeUploadRequset) {
 
 	response, err := call.Media(file).Do()
 	if err != nil {
-		fmt.Printf("Error making YouTube API call: %v", err)
+		log.Printf("Error making YouTube API call: %v", err)
 	}
-	fmt.Printf("Upload successful! Video ID: %v\n", response.Id)
+	log.Printf("Upload video result: %v", response)
 }
