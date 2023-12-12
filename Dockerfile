@@ -4,6 +4,8 @@ RUN apk update
 RUN apk upgrade
 RUN apk add --no-cache ffmpeg
 
+RUN apk update && apk add --no-cache gcc
+
 WORKDIR /application
 
 COPY . /application
