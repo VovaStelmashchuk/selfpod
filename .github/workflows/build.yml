@@ -15,7 +15,7 @@ jobs:
   build:
     runs-on: ubuntu:22.04
     container:
-      image: catthehacker/ubuntu:full-latest
+      image: nektos/act-environments-ubuntu:18.04
     steps:
       - uses: https://gitea.com/actions/checkout@v2
 
