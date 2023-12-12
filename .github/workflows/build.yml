@@ -26,7 +26,7 @@ jobs:
         id: meta
         uses: https://github.com/docker/metadata-action@v5
         with:
-          images: hacklabkyiv/prismo-app
+          images: vovochkastelmashchuk/selfpod
 
       - name: Login to GitHub Container Registry
         uses: https://github.com/docker/login-action@v1
