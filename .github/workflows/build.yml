@@ -18,7 +18,7 @@ env:
 
 jobs:
   release-image:
-    runs-on: ubuntu-latest
+    runs-on: main
     container:
       image: catthehacker/ubuntu:act-latest
 
