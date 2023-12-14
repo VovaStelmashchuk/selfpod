@@ -65,4 +65,4 @@ jobs:
             linux/arm64
           push: true
           tags: |
-            "vovochkastelmashchuk/selfpod:0.0.10"
+            "0.0.10"
