@@ -2,12 +2,12 @@ package database
 
 import (
 	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
 	"log"
+	_ "modernc.org/sqlite"
 )
 
 var (
-	DriverName     = "sqlite3"
+	DriverName     = "sqlite"
 	DataSourceName = "selfpod.db"
 )
 
