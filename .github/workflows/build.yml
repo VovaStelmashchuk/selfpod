@@ -40,6 +40,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USER_NAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
+      - name: Docker meta
+        id: meta
+        uses: https://github.com/docker/metadata-action@v5
+        with:
+          images: hacklabkyiv/prismo-app
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -53,7 +59,7 @@ jobs:
             ${{ env.DOCKER_ORG }}/${{ steps.meta.outputs.REPO_NAME }}:${{ steps.meta.outputs.REPO_VERSION }}
             ${{ env.DOCKER_ORG }}/${{ steps.meta.outputs.REPO_NAME }}:${{ env.DOCKER_LATEST }}            
 
-      - name: Build and push dind-rootless
+      - name: Build and push
         uses: docker/build-push-action@v5
         env:
           ACTIONS_RUNTIME_TOKEN: '' # See https://gitea.com/gitea/act_runner/issues/119
@@ -64,5 +70,4 @@ jobs:
             linux/amd64
             linux/arm64
           push: true
-          tags: |
-            "0.0.10"
+          tags: ${{ steps.meta.outputs.tags }}
