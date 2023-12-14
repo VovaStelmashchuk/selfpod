@@ -64,10 +64,8 @@ jobs:
         env:
           ACTIONS_RUNTIME_TOKEN: '' # See https://gitea.com/gitea/act_runner/issues/119
         with:
-          context: .
+          context: ./
           file: ./Dockerfile
-          platforms: |
-            linux/amd64
-            linux/arm64
+          platforms: linux/arm64/v8
           push: true
           tags: ${{ steps.meta.outputs.tags }}
