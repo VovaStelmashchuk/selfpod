@@ -12,6 +12,7 @@ services:
       - GOOGLE_REDIRECT_URL=http://localhost:6000/
     volumes:
       - ./for_docker_mount/:/application/tmp_files/
+      - ./files/:/application/files/
       - ./client_secret.json:/client_secret.json
       - ./selfpod.db:/selfpod.db
       - ./selfpod-logs.log:/selfpod-logs.log

@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	logFile, err := os.OpenFile("for_docker_mount/selfpod-logs.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	logFile, err := os.OpenFile("files/selfpod-logs.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatal("Error opening log file:", err)
 	}

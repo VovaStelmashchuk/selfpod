@@ -18,7 +18,7 @@ env:
 
 jobs:
   release-image:
-    runs-on: synology
+    runs-on: ubuntu
     container:
       image: catthehacker/ubuntu:act-latest
 

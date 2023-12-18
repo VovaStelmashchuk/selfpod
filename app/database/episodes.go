@@ -8,7 +8,7 @@ import (
 
 var (
 	DriverName     = "sqlite"
-	DataSourceName = "for_docker_mount/selfpod.db"
+	DataSourceName = "files/selfpod.db"
 )
 
 func init() {
