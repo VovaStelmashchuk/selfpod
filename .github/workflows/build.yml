@@ -44,7 +44,7 @@ jobs:
         id: meta
         uses: https://github.com/docker/metadata-action@v5
         with:
-          images: hacklabkyiv/prismo-app
+          images: vovochkastelmashchuk/selfpod
 
       - name: Build and push
         uses: docker/build-push-action@v5
