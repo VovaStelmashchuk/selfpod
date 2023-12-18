@@ -1,4 +1,4 @@
-name: Build Image Cross Platform
+name: Cross-Platform Docker Image Build and Push
 
 on:
   workflow_dispatch:
@@ -11,22 +11,15 @@ on:
     branches:
       - 'main'
 
-env:
-  GOPATH: /go_path
-  GOCACHE: /go_cache
-
-
 jobs:
   release-image:
-    runs-on: ubuntu
+    runs-on: ubuntu-latest
     container:
       image: catthehacker/ubuntu:act-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 # all history for all branches and tags
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -42,14 +35,12 @@ jobs:
 
       - name: Docker meta
         id: meta
-        uses: https://github.com/docker/metadata-action@v5
+        uses: docker/metadata-action@v5
         with:
           images: vovochkastelmashchuk/selfpod
 
       - name: Build and push
         uses: docker/build-push-action@v5
-        env:
-          ACTIONS_RUNTIME_TOKEN: '' # See https://gitea.com/gitea/act_runner/issues/119
         with:
           context: .
           file: ./Dockerfile
