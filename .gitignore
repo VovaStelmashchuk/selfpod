@@ -115,3 +115,4 @@ client_secret.json
 http-client.private.env.json
 selfpod.db
 selfpod-logs.log
+/files/
