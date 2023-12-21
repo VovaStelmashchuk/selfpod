@@ -29,7 +29,7 @@ func startServer() {
 	mux.HandleFunc(config.GoogleRedirectPath, google.Oauth2Callback)
 
 	log.Println("Server starting...")
-	err := http.ListenAndServe(":"+config.Port, loggingMiddleware(mux))
+	err := http.ListenAndServe(":"+config.Port, mux)
 
 	if err != nil {
 		log.Fatal("Error starting server: ", err)
