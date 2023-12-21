@@ -112,7 +112,7 @@ fabric.properties
 tmp_files
 for_docker_mount
 
-client_secret.json
+files/client_secret.json
 
 # Custom for docker
 ReadMe.md

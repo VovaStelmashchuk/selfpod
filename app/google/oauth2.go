@@ -107,7 +107,7 @@ func GetClient(scope string) (*http.Client, error) {
 }
 
 func getConfig(scope string) (*oauth2.Config, error) {
-	clientSecretFile, err := os.ReadFile("client_secret.json")
+	clientSecretFile, err := os.ReadFile("files/client_secret.json")
 	if err != nil {
 		log.Printf("Unable to read client secret file: %v", err)
 		return nil, err
