@@ -49,7 +49,6 @@ func requestLoggingMiddleware(next http.Handler) http.Handler {
 			if err != nil {
 				log.Printf("Error reading request body: %v", err)
 			}
-			defer r.Body.Close()
 
 			r.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 
