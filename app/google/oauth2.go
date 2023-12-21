@@ -1,6 +1,7 @@
 package google
 
 import (
+	"crypto/rand"
 	"encoding/json"
 	"fmt"
 	"golang.org/x/net/context"
@@ -31,9 +32,20 @@ func LoginToGoogle(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error getting config: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-	authUrl := config.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
+	authUrl := config.AuthCodeURL(generateRandomString(10), oauth2.AccessTypeOffline, oauth2.ApprovalForce)
 
 	io.WriteString(w, "The auth link is: "+removeTrailingSlash(authUrl)+"\n")
+}
+
+func generateRandomString(n int) string {
+	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	bytes := make([]byte, n)
+	rand.Read(bytes)
+
+	for i, b := range bytes {
+		bytes[i] = letters[b%byte(len(letters))]
+	}
+	return string(bytes)
 }
 
 func removeTrailingSlash(s string) string {
@@ -94,12 +106,10 @@ func GetClient(scope string) (*http.Client, error) {
 		log.Printf("Error getting new token: %v", err)
 		return nil, err
 	}
-
-	if newToken.AccessToken != tok.AccessToken {
-		// Token was refreshed, save the new token
-		err = saveToken(newToken)
-		if err != nil {
+	if newToken.AccessToken != tok.AccessToken || newToken.RefreshToken != "" {
+		if err := saveToken(newToken); err != nil {
 			log.Printf("Error saving refreshed token: %v", err)
+			return nil, err
 		}
 	}
 
@@ -127,6 +137,9 @@ func getConfig(scope string) (*oauth2.Config, error) {
 
 func exchangeToken(config *oauth2.Config, code string) (*oauth2.Token, error) {
 	tok, err := config.Exchange(context.Background(), code)
+
+	fmt.Println(tok)
+
 	if err != nil {
 		log.Printf("Unable to retrieve token: %v", err)
 		return nil, err

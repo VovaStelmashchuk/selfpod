@@ -4,14 +4,13 @@ Content-Type: application/json
 
 {
   "event": "episodePublished",
-  "id": "655a21197d946a0012ec4e5c",
-  "title": "My new episode 11",
+  "id": "6584a14ae11a76001695c9a5",
+  "title": "Test audio",
   "status": "published",
-  "publishDate": "2020-01-13T21:57:57.768Z",
-  "coverUrl": "https://kanapaimage.ams3.digitaloceanspaces.com/cocktails/135/origin/135.jpg",
-  "audioUrl": "https://kanapaimage.ams3.digitaloceanspaces.com/tmp/5m.wav"
+  "publishDate": "2023-12-21T20:12:39.625Z",
+  "coverUrl": "https://open-static.acast.com/global/images/default-cover.png",
+  "audioUrl": "https://assets.pippa.io/shows/657a133e3d9b3700170c8c5e/1703190840895-709365d91c0abe9141d4d1e1d3365ec3.mp3"
 }
-
 
 ### Call login to google
 POST {{url}}/login?token={{token}}

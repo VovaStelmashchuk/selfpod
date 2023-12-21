@@ -9,8 +9,8 @@ import (
 )
 
 const TemporaryFolder = "tmp_files"
-const AudioFile = "audio.wav"
-const ImageFile = "image.jpg"
+const AudioFile = "audio.mp3"
+const ImageFile = "image.png"
 
 func PrepareNewVideo(audioUrl string, imageUrl string) string {
 	err := os.RemoveAll(TemporaryFolder)
