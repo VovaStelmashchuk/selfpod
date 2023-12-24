@@ -14,7 +14,6 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"os/user"
 	"path/filepath"
 	"strings"
 )
@@ -148,12 +147,8 @@ func exchangeToken(config *oauth2.Config, code string) (*oauth2.Token, error) {
 }
 
 func tokenCacheFile() (string, error) {
-	usr, err := user.Current()
-	if err != nil {
-		return "", err
-	}
-	tokenCacheDir := filepath.Join(usr.HomeDir, ".credentials")
-	os.MkdirAll(tokenCacheDir, 0700)
+	tokenCacheDir := filepath.Join("files")
+	err := os.MkdirAll(tokenCacheDir, 0700)
 	return filepath.Join(
 		tokenCacheDir,
 		url.QueryEscape("youtube-go.json"),

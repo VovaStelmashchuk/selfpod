@@ -5,6 +5,7 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/api/option"
 	"log"
+	"main/app/config"
 	"main/app/google"
 	"os"
 	"strings"
@@ -45,6 +46,7 @@ func UploadToYoutube(uploadRequest YoutubeUploadRequset) {
 			Title:       uploadRequest.Title,
 			Description: uploadRequest.Description,
 			CategoryId:  *category,
+			ChannelId:   config.YoutubeChannelId,
 		},
 		Status: &youtube.VideoStatus{PrivacyStatus: *privacy},
 	}

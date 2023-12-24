@@ -12,4 +12,6 @@ var (
 	GoogleRedirectHost = os.Getenv("GOOGLE_REDIRECT_URL")
 
 	GoogleRedirectPath = "/auth/google/callback"
+
+	YoutubeChannelId = os.Getenv("YOUTUBE_CHANNEL_ID")
 )

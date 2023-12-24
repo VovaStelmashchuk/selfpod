@@ -4,7 +4,6 @@ import (
 	"log"
 	"main/app/database"
 	"main/app/media"
-	"time"
 )
 
 type ProcessEpisodeTask struct {
@@ -30,10 +29,6 @@ func worker(taskQueue <-chan ProcessEpisodeTask) {
 }
 
 func processTask(task ProcessEpisodeTask) {
-	log.Printf("Processing episode %v before delay", task.EpisodeId)
-	time.Sleep(10 * time.Second)
-	log.Printf("Processing episode %v after delay", task.EpisodeId)
-
 	err := database.UpdateEpisodeState(task.EpisodeId, database.IN_PROGRESS)
 	if err != nil {
 		log.Printf("Error updating episode state to IN_PROGRESS: %v", err)
