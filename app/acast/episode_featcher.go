@@ -8,6 +8,7 @@ import (
 	"log"
 	"main/app/config"
 	"strings"
+	"time"
 )
 
 type EpisodeMetaInfo struct {
@@ -16,6 +17,10 @@ type EpisodeMetaInfo struct {
 }
 
 func GetEpisodeMetaInfo(episodeId string) (EpisodeMetaInfo, error) {
+	log.Printf("Before fetching feed\n")
+	time.Sleep(10 * time.Second)
+	log.Printf("After fetching feed\n")
+
 	fp := gofeed.NewParser()
 	feedUrl := "https://feeds.acast.com/public/shows/" + config.ACastShowId
 	log.Printf("Fetching feed from %s\n", feedUrl)
