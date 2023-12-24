@@ -3,9 +3,9 @@ package acast
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"github.com/mmcdole/gofeed"
 	"golang.org/x/net/html"
+	"log"
 	"main/app/config"
 	"strings"
 )
@@ -18,10 +18,10 @@ type EpisodeMetaInfo struct {
 func GetEpisodeMetaInfo(episodeId string) (EpisodeMetaInfo, error) {
 	fp := gofeed.NewParser()
 	feedUrl := "https://feeds.acast.com/public/shows/" + config.ACastShowId
-	fmt.Printf("Fetching feed from %s\n", feedUrl)
+	log.Printf("Fetching feed from %s\n", feedUrl)
 	feed, _ := fp.ParseURL(feedUrl)
 
-	fmt.Printf("Feed : %s\n", feed)
+	log.Printf("Feed : %s\n", feed)
 
 	found := false
 	var targetEpisode *gofeed.Item
