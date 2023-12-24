@@ -5,7 +5,7 @@ import (
 	"log"
 	"main/app/config"
 	"main/app/database"
-	"main/app/media"
+	"main/app/processing"
 	"net/http"
 )
 
@@ -13,6 +13,7 @@ type Episode struct {
 	ID       string `json:"id"`
 	CoverUrl string `json:"coverUrl"`
 	AudioUrl string `json:"audioUrl"`
+	Title    string `json:"title"`
 }
 
 type JsonResponse struct {
@@ -34,27 +35,18 @@ func WebHook(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Fail to decode body", http.StatusInternalServerError)
 	}
 
-	episodeMetaInfo, err := GetEpisodeMetaInfo(episode.ID)
-
-	if err != nil {
-		log.Printf("fail to get episode meta info: %v", err)
-		http.Error(w, "Something went wrong", http.StatusInternalServerError)
-		return
-	}
-
 	id, err := database.SaveEpisode(
 		database.Episode{
 			AcastId:         episode.ID,
-			Title:           episodeMetaInfo.Title,
+			Title:           episode.Title,
 			ImageUrl:        episode.CoverUrl,
 			AudioUrl:        episode.AudioUrl,
-			Description:     episodeMetaInfo.Description,
 			ProcessingState: database.NOT_STARTED,
 		},
 	)
 
-	media.ProcessEpisode(
-		media.ProcessEpisodeTask{
+	processing.ProcessEpisode(
+		processing.ProcessEpisodeTask{
 			EpisodeId: int(id),
 		},
 	)

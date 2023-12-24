@@ -1,4 +1,4 @@
-package acast
+package processing
 
 import (
 	"bytes"
@@ -7,24 +7,15 @@ import (
 	"golang.org/x/net/html"
 	"log"
 	"main/app/config"
+	"net/http"
 	"strings"
 	"time"
 )
 
-type EpisodeMetaInfo struct {
-	Title       string
-	Description string
-}
-
-func GetEpisodeMetaInfo(episodeId string) (EpisodeMetaInfo, error) {
-	log.Printf("Before fetching feed\n")
-	time.Sleep(10 * time.Second)
-	log.Printf("After fetching feed\n")
-
-	fp := gofeed.NewParser()
+func GetEpisodeDescription(episodeId string) (string, error) {
 	feedUrl := "https://feeds.acast.com/public/shows/" + config.ACastShowId
 	log.Printf("Fetching feed from %s\n", feedUrl)
-	feed, _ := fp.ParseURL(feedUrl)
+	feed, _ := fetchFeed(feedUrl)
 
 	log.Printf("Feed : %s\n", feed)
 
@@ -42,18 +33,43 @@ func GetEpisodeMetaInfo(episodeId string) (EpisodeMetaInfo, error) {
 	}
 
 	if found {
-		return buildEpisodeMetaInfo(targetEpisode)
+		return buildEDescription(targetEpisode)
 	} else {
-		return EpisodeMetaInfo{}, errors.New("episode not found")
+		return "", errors.New("episode not found")
 	}
 }
 
-func buildEpisodeMetaInfo(targetEpisode *gofeed.Item) (EpisodeMetaInfo, error) {
+func fetchFeed(feedUrl string) (*gofeed.Feed, error) {
+	// Create a client with some timeout
+	client := &http.Client{Timeout: 10 * time.Second}
+
+	// Create a request and modify its headers
+	req, err := http.NewRequest("GET", feedUrl, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Cache-Control", "no-cache")
+
+	// Do the request
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	// Parse the feed
+	fp := gofeed.NewParser()
+	feed, err := fp.Parse(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return feed, nil
+}
+
+func buildEDescription(targetEpisode *gofeed.Item) (string, error) {
 	lines, err := extractPTagsBeforeBR(targetEpisode.Description)
-	return EpisodeMetaInfo{
-		Title:       targetEpisode.Title,
-		Description: strings.Join(lines, "\n"),
-	}, err
+	return strings.Join(lines, "\n"), err
 }
 func extractPTagsBeforeBR(htmlContent string) ([]string, error) {
 	doc, err := html.Parse(strings.NewReader(htmlContent))

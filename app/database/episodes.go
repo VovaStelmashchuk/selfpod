@@ -23,7 +23,6 @@ func init() {
         title TEXT,
         audio_url TEXT,
         image_url TEXT,
-        description TEXT,
         processing_state INTEGER
     );`
 	_, err = db.Exec(createTableSQL)
@@ -50,7 +49,6 @@ type Episode struct {
 	Title           string
 	AudioUrl        string
 	ImageUrl        string
-	Description     string
 	ProcessingState EpisodeProcessStatus
 }
 
@@ -65,9 +63,8 @@ func SaveEpisode(episode Episode) (int64, error) {
                       title, 
                       audio_url, 
                       image_url, 
-                      description, 
                       processing_state
-				  ) VALUES (?, ?, ?, ?, ?, ?)`
+				  ) VALUES (?, ?, ?, ?, ?)`
 
 	statement, err := client.Prepare(insertSQL)
 	if err != nil {
@@ -80,7 +77,6 @@ func SaveEpisode(episode Episode) (int64, error) {
 		episode.Title,
 		episode.AudioUrl,
 		episode.ImageUrl,
-		episode.Description,
 		episode.ProcessingState,
 	)
 
@@ -95,12 +91,11 @@ func GetEpisode(id int) (*Episode, error) {
 	}
 
 	var episode Episode
-	querySQL := `SELECT id, acast_id, title, audio_url, image_url, description, 
-processing_state FROM episodes WHERE id = ?`
+	querySQL := `SELECT id, acast_id, title, audio_url, image_url, processing_state FROM episodes WHERE id = ?`
 	row := client.QueryRow(querySQL, id)
 
 	err = row.Scan(
-		&episode.Id, &episode.AcastId, &episode.Title, &episode.AudioUrl, &episode.ImageUrl, &episode.Description,
+		&episode.Id, &episode.AcastId, &episode.Title, &episode.AudioUrl, &episode.ImageUrl,
 		&episode.ProcessingState,
 	)
 	if err != nil {
