@@ -3,16 +3,16 @@ version: '3'
 services:
   app:
     container_name: selfpod
-    build: .
+    image: vovochkastelmashchuk/selfpod:0.2.0
     ports:
       - "6000:5000"
     environment:
-      - A_CAST_HOOK_TOKEN=token
+      - A_CAST_HOOK_TOKEN=a_cast_hook_token
       - APP_PORT=5000
-      - GOOGLE_REDIRECT_URL=http://localhost:6000/
+      - GOOGLE_REDIRECT_URL=google_redirect_url
+      - A_CAST_SHOW_ID=a_cast_show_id
+      - YOUTUBE_CHANNEL_ID=youtube_channel_id
     volumes:
       - ./for_docker_mount/:/application/tmp_files/
       - ./files/:/application/files/
       - ./client_secret.json:/client_secret.json
-      - ./selfpod.db:/selfpod.db
-      - ./selfpod-logs.log:/selfpod-logs.log
