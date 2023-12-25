@@ -24,7 +24,6 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
-      # So now you can use Actions' own caching!
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:

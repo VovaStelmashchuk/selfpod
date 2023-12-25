@@ -30,7 +30,7 @@ func PrepareNewVideo(audioUrl string, imageUrl string) string {
 func createVideoFile(metaFiles MetaFiles) string {
 	outputFile := path.Join(TemporaryFolder, "output.mov")
 
-	println(metaFiles.image)
+	log.Printf(metaFiles.image)
 
 	log.Printf("Creating video %s by ffmpeg", outputFile)
 

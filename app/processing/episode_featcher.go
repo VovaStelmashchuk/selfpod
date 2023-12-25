@@ -17,8 +17,6 @@ func GetEpisodeDescription(episodeId string) (string, error) {
 	log.Printf("Fetching feed from %s\n", feedUrl)
 	feed, _ := fetchFeed(feedUrl)
 
-	log.Printf("Feed : %s\n", feed)
-
 	found := false
 	var targetEpisode *gofeed.Item
 
