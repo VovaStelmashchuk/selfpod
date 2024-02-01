@@ -4,6 +4,7 @@ services:
   app:
     container_name: selfpod
     image: vovochkastelmashchuk/selfpod:0.2.0
+    restart: always
     ports:
       - "6000:5000"
     environment:

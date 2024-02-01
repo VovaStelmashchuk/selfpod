@@ -16,7 +16,7 @@ import (
 var (
 	category = flag.String("category", "22", "Video category")
 	keywords = flag.String("keywords", "", "Comma separated list of video keywords")
-	privacy  = flag.String("privacy", "unlisted", "Video privacy status")
+	privacy  = flag.String("privacy", "public", "Video privacy status")
 )
 
 type YoutubeUploadRequset struct {
