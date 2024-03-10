@@ -40,9 +40,9 @@ func processTask(task ProcessEpisodeTask) {
 
 	videoFile := media.PrepareNewVideo(episode.AudioUrl, episode.ImageUrl)
 
-	log.Printf("Sleep for 8 seconds before getting episode description...")
+	log.Printf("Sleep for 10 seconds before getting episode description...")
 
-	time.Sleep(8 * time.Second)
+	time.Sleep(10 * time.Second)
 
 	episodeMetaInfo, err := GetEpisodeDescription(episode.AcastId)
 
