@@ -4,6 +4,7 @@ import (
 	"log"
 	"main/app/database"
 	"main/app/media"
+	"time"
 )
 
 type ProcessEpisodeTask struct {
@@ -38,6 +39,10 @@ func processTask(task ProcessEpisodeTask) {
 	episode, err := database.GetEpisode(task.EpisodeId)
 
 	videoFile := media.PrepareNewVideo(episode.AudioUrl, episode.ImageUrl)
+
+	log.Printf("Sleep for 8 seconds before getting episode description...")
+
+	time.Sleep(8 * time.Second)
 
 	episodeMetaInfo, err := GetEpisodeDescription(episode.AcastId)
 

@@ -7,6 +7,12 @@ The application is a simple go app which receive the webhook from a cast and dow
 Then the app create a video from the audio and cover files by ffmpeg, generate the youtube based on description from the
 rss feed. Then the app upload the video to youtube.
 
+## The project goal
+
+The one reason to create automation pipeline for Android Story podcast workflow. The vector of the project will be
+changed in case of Android story podcast workflow changes. **Keep in mind, the project is not a product. I recommend to
+research the project and get the idea which can be applied into your project.**
+
 ### Run app by docker compose
 
 ```bash
@@ -27,22 +33,41 @@ services:
     volumes:
       - ./for_docker_mount/:/application/tmp_files/
       - ./files/:/application/files/
-      - ./client_secret.json:/client_secret.json
 ```
 
 The google redirect url will be `<your redirest url>/auth/google/callback`
+
+Create file in the root `client_secret.json` with the following content:
+
+```json
+{
+  "web": {
+    "client_id": "<your client id>",
+    "project_id": "<your project id>",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret": "<your client secret>",
+    "redirect_uris": [
+      "<your redirect url>/auth/google/callback"
+    ]
+  }
+}
+``` 
 
 ## Using
 
 The app support only one podcast per one instance. You can run multiple instances for multiple podcasts.
 Also its means the app support only one rss feed, one youtube account, etc per one instance.
 
-Currently the app using by [Android Story podcast](https://www.youtube.com/channel/UC6-NFk4uOGsKvyisL1QC3rw). The app
+Currently, the app using by [Android Story podcast](https://www.youtube.com/channel/UC6-NFk4uOGsKvyisL1QC3rw). The app
 run on Raspberry Pi 4 with 2GB RAM at my home. And we successfully downgrade our Acast plan to free.
 
-## Open source todo
+## TODO
 
 - Some UI improvements
+- Write some tool for generating the public and private podcasts.
+- Auto podcast editing tool.
 
 ## Build docker image
 

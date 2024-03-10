@@ -23,6 +23,7 @@ func init() {
         title TEXT,
         audio_url TEXT,
         image_url TEXT,
+        description TEXT,
         processing_state INTEGER
     );`
 	_, err = db.Exec(createTableSQL)

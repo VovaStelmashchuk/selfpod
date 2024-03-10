@@ -110,9 +110,8 @@ fabric.properties
 
 ## Project specific
 tmp_files
-for_docker_mount
 
-files/client_secret.json
+files
 
 # Custom for docker
 ReadMe.md
