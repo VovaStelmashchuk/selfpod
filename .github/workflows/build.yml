@@ -13,9 +13,7 @@ on:
 
 jobs:
   release-image:
-    runs-on: ubuntu
-    container:
-      image: catthehacker/ubuntu:act-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout
