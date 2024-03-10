@@ -41,7 +41,7 @@ func WebHook(w http.ResponseWriter, r *http.Request) {
 			Title:           episode.Title,
 			ImageUrl:        episode.CoverUrl,
 			AudioUrl:        episode.AudioUrl,
-			ProcessingState: database.NOT_STARTED,
+			ProcessingState: database.NotStarted,
 		},
 	)
 

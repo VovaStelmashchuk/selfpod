@@ -34,13 +34,13 @@ func init() {
 	defer db.Close()
 }
 
-type EpisodeProcessStatus int
+type EpisodeProcessStatus string
 
 const (
-	FAIL EpisodeProcessStatus = iota
-	IN_PROGRESS
-	SUCCESS
-	NOT_STARTED
+	Fail       EpisodeProcessStatus = "Fail"
+	InProgress EpisodeProcessStatus = "InProgress"
+	Success    EpisodeProcessStatus = "Success"
+	NotStarted EpisodeProcessStatus = "NotStarted"
 )
 
 type Episode struct {
@@ -49,6 +49,7 @@ type Episode struct {
 	Title           string
 	AudioUrl        string
 	ImageUrl        string
+	Description     string
 	ProcessingState EpisodeProcessStatus
 }
 
@@ -119,4 +120,21 @@ func UpdateEpisodeState(id int, newState EpisodeProcessStatus) error {
 
 	_, err = statement.Exec(newState, id)
 	return err
+}
+
+func AddDescriptionToEpisode(id int, description string) error {
+	client, err := sql.Open(DriverName, DataSourceName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	updateSQL := `UPDATE episodes SET description = ? WHERE id = ?`
+	statement, err := client.Prepare(updateSQL)
+	if err != nil {
+		return err
+	}
+	defer statement.Close()
+
+	_, err = statement.Exec(description, id)
+	return err
+
 }

@@ -31,7 +31,7 @@ func GetEpisodeDescription(episodeId string) (string, error) {
 	}
 
 	if found {
-		return buildEDescription(targetEpisode)
+		return buildDescription(targetEpisode)
 	} else {
 		return "", errors.New("episode not found")
 	}
@@ -65,7 +65,7 @@ func fetchFeed(feedUrl string) (*gofeed.Feed, error) {
 	return feed, nil
 }
 
-func buildEDescription(targetEpisode *gofeed.Item) (string, error) {
+func buildDescription(targetEpisode *gofeed.Item) (string, error) {
 	lines, err := extractPTagsBeforeBR(targetEpisode.Description)
 	return strings.Join(lines, "\n"), err
 }

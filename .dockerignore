@@ -116,7 +116,7 @@ files/client_secret.json
 
 # Custom for docker
 ReadMe.md
-test.http
+api.http
 
 .git
 .gitignore

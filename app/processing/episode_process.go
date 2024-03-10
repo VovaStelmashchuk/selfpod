@@ -29,7 +29,7 @@ func worker(taskQueue <-chan ProcessEpisodeTask) {
 }
 
 func processTask(task ProcessEpisodeTask) {
-	err := database.UpdateEpisodeState(task.EpisodeId, database.IN_PROGRESS)
+	err := database.UpdateEpisodeState(task.EpisodeId, database.InProgress)
 	if err != nil {
 		log.Printf("Error updating episode state to IN_PROGRESS: %v", err)
 		return
@@ -41,18 +41,34 @@ func processTask(task ProcessEpisodeTask) {
 
 	episodeMetaInfo, err := GetEpisodeDescription(episode.AcastId)
 
+	if err != nil {
+		log.Printf("Error getting episode meta info: %v", err)
+		return
+	}
+
+	log.Printf("Episode meta info: %v", episodeMetaInfo)
+
+	episodeDescription := episodeMetaInfo + "\n Ви можете підтримати нас на https://www.patreon.com/androidstory"
+
+	err = database.AddDescriptionToEpisode(task.EpisodeId, episodeDescription)
+
+	if err != nil {
+		log.Printf("Error adding episode description: %v", err)
+		return
+	}
+
 	media.UploadToYoutube(
 		media.YoutubeUploadRequset{
 			Filename:    videoFile,
 			Title:       episode.Title,
-			Description: episodeMetaInfo + "\n Ви можете підтримати нас на https://www.patreon.com/androidstory",
+			Description: episodeDescription,
 		},
 	)
 
-	err = database.UpdateEpisodeState(task.EpisodeId, database.SUCCESS)
+	err = database.UpdateEpisodeState(task.EpisodeId, database.Success)
 
 	if err != nil {
-		log.Printf("Error updating episode state to SUCCESS: %v", err)
-		database.UpdateEpisodeState(task.EpisodeId, database.FAIL)
+		log.Printf("Error updating episode state to Success: %v", err)
+		database.UpdateEpisodeState(task.EpisodeId, database.Fail)
 	}
 }
