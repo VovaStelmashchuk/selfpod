@@ -64,7 +64,7 @@ func processTask(task ProcessEpisodeTask) {
 	}
 
 	media.UploadToYoutube(
-		media.YoutubeUploadRequset{
+		media.YoutubeUploadRequest{
 			Filename:    videoFile,
 			Title:       episode.Title,
 			Description: episodeDescription,

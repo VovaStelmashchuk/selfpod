@@ -16,7 +16,7 @@ Content-Type: application/json
 POST {{url}}/login?token={{token}}
 
 ### Reupload episode by spec id, rebuild video, rebuild description, etc.
-POST {{url}}/try_upload?token={{token}}&episodeId=4
+POST {{url}}/try_upload?token={{token}}&episodeId=2
 
 ### End point to call callback from the google service
 GET http://localhost:6000/auth/google/callback

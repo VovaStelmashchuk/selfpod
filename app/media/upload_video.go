@@ -19,13 +19,13 @@ var (
 	privacy  = flag.String("privacy", "public", "Video privacy status")
 )
 
-type YoutubeUploadRequset struct {
+type YoutubeUploadRequest struct {
 	Filename    string
 	Title       string
 	Description string
 }
 
-func UploadToYoutube(uploadRequest YoutubeUploadRequset) {
+func UploadToYoutube(uploadRequest YoutubeUploadRequest) {
 	flag.Parse()
 
 	client, getClientError := google.GetClient(youtube.YoutubeUploadScope)
