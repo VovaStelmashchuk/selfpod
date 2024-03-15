@@ -48,6 +48,7 @@ func processTask(task ProcessEpisodeTask) {
 
 	if err != nil {
 		log.Printf("Error getting episode meta info: %v", err)
+		_ = database.UpdateEpisodeState(task.EpisodeId, database.Fail)
 		return
 	}
 
@@ -74,6 +75,6 @@ func processTask(task ProcessEpisodeTask) {
 
 	if err != nil {
 		log.Printf("Error updating episode state to Success: %v", err)
-		database.UpdateEpisodeState(task.EpisodeId, database.Fail)
+		_ = database.UpdateEpisodeState(task.EpisodeId, database.Fail)
 	}
 }

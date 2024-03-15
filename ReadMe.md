@@ -72,3 +72,7 @@ run on Raspberry Pi 4 with 2GB RAM at my home. And we successfully downgrade our
 ## Build docker image
 
 Check the building process in ci files.
+
+### API
+
+Look to api in file api.http

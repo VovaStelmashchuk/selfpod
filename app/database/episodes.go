@@ -97,7 +97,11 @@ func GetEpisode(id int) (*Episode, error) {
 	row := client.QueryRow(querySQL, id)
 
 	err = row.Scan(
-		&episode.Id, &episode.AcastId, &episode.Title, &episode.AudioUrl, &episode.ImageUrl,
+		&episode.Id,
+		&episode.AcastId,
+		&episode.Title,
+		&episode.AudioUrl,
+		&episode.ImageUrl,
 		&episode.ProcessingState,
 	)
 	if err != nil {

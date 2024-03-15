@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"main/app/acast"
+	"main/app/admin"
 	"main/app/config"
 	"main/app/google"
 	"net/http"
@@ -30,6 +31,7 @@ func startServer() {
 	mux.HandleFunc("/acast", acast.WebHook)
 	mux.HandleFunc("/login", google.LoginToGoogle)
 	mux.HandleFunc(config.GoogleRedirectPath, google.Oauth2Callback)
+	mux.HandleFunc("/try_upload", admin.TryUploadAgain)
 
 	loggedMux := requestLoggingMiddleware(mux)
 

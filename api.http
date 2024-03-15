@@ -8,27 +8,15 @@ Content-Type: application/json
   "title": "Test audio",
   "status": "published",
   "publishDate": "2023-12-21T20:12:39.625Z",
-  "coverUrl":"https://open-static.acast.com/global/images/default-cover.png",
-  "audioUrl":"https://assets.pippa.io/shows/657a133e3d9b3700170c8c5e/1703433141613-954af398aa65615f1e67503a96822405.mp3"
+  "coverUrl": "https://open-static.acast.com/global/images/default-cover.png",
+  "audioUrl": "https://assets.pippa.io/shows/657a133e3d9b3700170c8c5e/1703433141613-954af398aa65615f1e67503a96822405.mp3"
 }
 
 ### Call login to google
 POST {{url}}/login?token={{token}}
 
-###
+### Reupload episode by spec id, rebuild video, rebuild description, etc.
+POST {{url}}/try_upload?token={{token}}&episodeId=4
+
+### End point to call callback from the google service
 GET http://localhost:6000/auth/google/callback
-
-
-###
-POST http://localhost:6000/add
-Content-Type: application/json
-
-{
-  "event": "episodePublished",
-  "id": "655a21197d946a0012ec4e5c",
-  "title": "My new episode 11",
-  "status": "published",
-  "publishDate": "2020-01-13T21:57:57.768Z",
-  "coverUrl": "https://kanapaimage.ams3.digitaloceanspaces.com/cocktails/20/origin/20.jpg",
-  "audioUrl": "https://kanapaimage.ams3.digitaloceanspaces.com/tmp/5m.wav"
-}
