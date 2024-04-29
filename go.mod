@@ -3,12 +3,12 @@ module main
 go 1.20
 
 require (
+	github.com/gtuk/discordwebhook v1.2.0
 	github.com/mmcdole/gofeed v1.2.1
 	golang.org/x/net v0.19.0
 	golang.org/x/oauth2 v0.15.0
 	google.golang.org/api v0.126.0
 	modernc.org/sqlite v1.28.0
-
 )
 
 require (

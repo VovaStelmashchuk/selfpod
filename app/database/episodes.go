@@ -111,6 +111,32 @@ func GetEpisode(id int) (*Episode, error) {
 	return &episode, nil
 }
 
+func GetEpisodeIdsByState(state EpisodeProcessStatus) ([]int, error) {
+	client, err := sql.Open(DriverName, DataSourceName)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var ids []int
+	querySQL := `SELECT id FROM episodes WHERE processing_state = ?`
+	rows, err := client.Query(querySQL, state)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id int
+		err = rows.Scan(&id)
+		if err != nil {
+			return nil, err
+		}
+		ids = append(ids, id)
+	}
+
+	return ids, nil
+}
+
 func UpdateEpisodeState(id int, newState EpisodeProcessStatus) error {
 	client, err := sql.Open(DriverName, DataSourceName)
 	if err != nil {

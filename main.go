@@ -8,6 +8,8 @@ import (
 	"main/app/admin"
 	"main/app/config"
 	"main/app/google"
+	"main/app/notifications"
+	"main/app/processing"
 	"net/http"
 	"os"
 	"strings"
@@ -22,6 +24,8 @@ func main() {
 
 	log.SetOutput(logFile)
 
+	notifications.SendDiscordNotification("Server starting...")
+	processing.RestoreFailedProcess()
 	startServer()
 }
 

@@ -14,4 +14,7 @@ var (
 	GoogleRedirectPath = "/auth/google/callback"
 
 	YoutubeChannelId = os.Getenv("YOUTUBE_CHANNEL_ID")
+
+	DiscordWebhookUrl = os.Getenv("DISCORD_WEBHOOK_URL")
+	DiscordBotName    = os.Getenv("DISCORD_BOT_NAME")
 )

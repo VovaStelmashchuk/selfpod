@@ -13,6 +13,8 @@ services:
       - GOOGLE_REDIRECT_URL=google_redirect_url
       - A_CAST_SHOW_ID=a_cast_show_id
       - YOUTUBE_CHANNEL_ID=youtube_channel_id
+      - DISCORD_WEBHOOK_URL=<discord webhook url>
+      - DISCORD_WEBHOOK_NAME=<discord bot name>
     volumes:
       - ./for_docker_mount/:/application/tmp_files/
       - ./files/:/application/files/

@@ -7,6 +7,7 @@ import (
 	"log"
 	"main/app/config"
 	"main/app/google"
+	"main/app/notifications"
 	"os"
 	"strings"
 
@@ -66,6 +67,7 @@ func UploadToYoutube(uploadRequest YoutubeUploadRequest) {
 
 	response, err := call.Media(file).Do()
 	if err != nil {
+		notifications.SendDiscordNotification("Error making YouTube API call, check logs")
 		log.Printf("Error making YouTube API call: %v", err)
 	}
 	log.Printf("Upload video result: %v", response)

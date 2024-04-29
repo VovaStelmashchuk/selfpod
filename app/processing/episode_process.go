@@ -4,6 +4,7 @@ import (
 	"log"
 	"main/app/database"
 	"main/app/media"
+	"main/app/notifications"
 	"time"
 )
 
@@ -30,6 +31,7 @@ func worker(taskQueue <-chan ProcessEpisodeTask) {
 }
 
 func processTask(task ProcessEpisodeTask) {
+	log.Printf("Processing episode: %v", task.EpisodeId)
 	err := database.UpdateEpisodeState(task.EpisodeId, database.InProgress)
 	if err != nil {
 		log.Printf("Error updating episode state to IN_PROGRESS: %v", err)
@@ -74,6 +76,7 @@ func processTask(task ProcessEpisodeTask) {
 	err = database.UpdateEpisodeState(task.EpisodeId, database.Success)
 
 	if err != nil {
+		notifications.SendDiscordNotification("Something went wrong, check logs, episode title: " + episode.Title)
 		log.Printf("Error updating episode state to Success: %v", err)
 		_ = database.UpdateEpisodeState(task.EpisodeId, database.Fail)
 	}
