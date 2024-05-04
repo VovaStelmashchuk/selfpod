@@ -65,7 +65,7 @@ func processTask(task ProcessEpisodeTask) {
 		return
 	}
 
-	media.UploadToYoutube(
+	err = media.UploadToYoutube(
 		media.YoutubeUploadRequest{
 			Filename:    videoFile,
 			Title:       episode.Title,
@@ -73,7 +73,14 @@ func processTask(task ProcessEpisodeTask) {
 		},
 	)
 
+	if err != nil {
+		notifications.SendDiscordNotification("Error uploading episode to YouTube, check logs, episode title: " + episode.Title)
+		return
+	}
+
 	err = database.UpdateEpisodeState(task.EpisodeId, database.Success)
+
+	notifications.SendDiscordNotification("Episode uploaded: " + episode.Title)
 
 	if err != nil {
 		notifications.SendDiscordNotification("Something went wrong, check logs, episode title: " + episode.Title)

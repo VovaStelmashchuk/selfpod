@@ -26,20 +26,23 @@ type YoutubeUploadRequest struct {
 	Description string
 }
 
-func UploadToYoutube(uploadRequest YoutubeUploadRequest) {
+func UploadToYoutube(uploadRequest YoutubeUploadRequest) error {
 	flag.Parse()
 
 	client, getClientError := google.GetClient(youtube.YoutubeUploadScope)
 
 	if getClientError != nil {
-		log.Fatalf("Error creating YouTube client: %v", getClientError)
+		notifications.SendDiscordNotification("Error creating YouTube client, check logs" + getClientError.Error())
+		log.Printf("Error creating YouTube client: %v", getClientError)
+		return getClientError
 	}
 
 	ctx := context.Background()
 	service, err := youtube.NewService(ctx, option.WithHTTPClient(client))
 
 	if err != nil {
-		log.Fatalf("Error creating YouTube new service: %v", err)
+		log.Printf("Error creating YouTube new service: %v", err)
+		return err
 	}
 
 	upload := &youtube.Video{
@@ -71,4 +74,5 @@ func UploadToYoutube(uploadRequest YoutubeUploadRequest) {
 		log.Printf("Error making YouTube API call: %v", err)
 	}
 	log.Printf("Upload video result: %v", response)
+	return err
 }

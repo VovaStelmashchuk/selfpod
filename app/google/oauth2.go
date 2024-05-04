@@ -8,9 +8,9 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/youtube/v3"
-	"io"
 	"log"
 	appconfig "main/app/config"
+	"main/app/notifications"
 	"net/http"
 	"net/url"
 	"os"
@@ -33,7 +33,10 @@ func LoginToGoogle(w http.ResponseWriter, r *http.Request) {
 	}
 	authUrl := config.AuthCodeURL(generateRandomString(10), oauth2.AccessTypeOffline, oauth2.ApprovalForce)
 
-	io.WriteString(w, "The auth link is: "+removeTrailingSlash(authUrl)+"\n")
+	w.Header().Set("Content-Type", "text/html")
+	_, _ = fmt.Fprintf(w,
+		"<html><body><a href=\""+removeTrailingSlash(authUrl)+"\"><p>Auth link. </a></body></html>",
+	)
 }
 
 func generateRandomString(n int) string {
@@ -82,8 +85,10 @@ func Oauth2Callback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	notifications.SendDiscordNotification("Google authorization successfully updated")
+
 	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprintf(w, "<html><body><p>Authorization successful. You can now close this window.</p></body></html>")
+	fmt.Fprintf(w, "<html><body>∂<p>Authorization successful. You can now close this window.</p></body></html>")
 }
 
 func GetClient(scope string) (*http.Client, error) {
