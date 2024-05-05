@@ -8,6 +8,7 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/youtube/v3"
+	"io"
 	"log"
 	appconfig "main/app/config"
 	"main/app/notifications"
@@ -33,10 +34,7 @@ func LoginToGoogle(w http.ResponseWriter, r *http.Request) {
 	}
 	authUrl := config.AuthCodeURL(generateRandomString(10), oauth2.AccessTypeOffline, oauth2.ApprovalForce)
 
-	w.Header().Set("Content-Type", "text/html")
-	_, _ = fmt.Fprintf(w,
-		"<html><body><a href=\""+removeTrailingSlash(authUrl)+"\"><p>Auth link. </a></body></html>",
-	)
+	io.WriteString(w, "The auth link is: "+removeTrailingSlash(authUrl)+"\n")
 }
 
 func generateRandomString(n int) string {
