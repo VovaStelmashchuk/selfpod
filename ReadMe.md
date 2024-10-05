@@ -1,3 +1,7 @@
+## Moved to Archive
+[AndroidStory](https://androidstory.dev/) moved to new solution which provide admin pannel for podcast hosts and some automation around podcast hosting. 
+New solution also open source [YourPod](https://github.com/VovaStelmashchuk/yourpod)
+
 ## Selfpod
 
 The system for podcast owners to duplicate their podcast to youtube automatically by power of open source; free and
